@@ -52,7 +52,7 @@ public class Main {
             }
             if (allDone || day>=totalDays) break;
             day++;
-            System.out.println("\n✅ All subjects scheduled:");
+            System.out.println("\n All subjects scheduled:");
             for (Subject s : subjects) {
                 System.out.println(s);
         }
