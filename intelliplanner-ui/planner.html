@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Gently 🌱</title>
+    <link rel="stylesheet" href="planner.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<main class="container">
+    <header class="header">
+        <h1>let’s plan gently 🌷</h1>
+        <p>we’ll take it one step at a time</p>
+    </header>
+
+    <section class="card">
+        <label>when do you want to feel done?</label>
+        <input type="date" id="targetDate">
+    </section>
+
+    <section class="card">
+        <h2>add a subject</h2>
+        <input type="text" id="subjectName" placeholder="subject name">
+        <input type="number" id="totalHours" placeholder="total hours">
+        <input type="number" id="priority" placeholder="priority (1 = high)">
+        <button id="addSubject">add 🤍</button>
+    </section>
+
+    <section class="card">
+        <h2>on your plate 🍃</h2>
+        <ul id="subjectList"></ul>
+    </section>
+
+    <section class="card">
+        <button id="generatePlan" class="primary">make my plan ✨</button>
+    </section>
+
+    <section class="card">
+        <h2>your gentle plan 🌱</h2>
+        <div id="planOutput"></div>
+    </section>
+</main>
+<script src="./script.js"></script>
+</body>
+</html>
