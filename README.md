@@ -1,28 +1,20 @@
 # IntelliPlanner – Smart Study Scheduler 🧠📅
 
-A Java-based study planner that helps students schedule their subjects based on total hours, priority, and target exam date.
+A full-stack study planning system that helps students generate personalized study schedules based on available time, subject priority, and academic goals.
 
-## 💡 Features
-- Takes subject name, required study hours, and priority as input
-- Calculates how many hours to study daily based on target exam date
-- Automatically distributes the workload
-- Displays day-by-day schedule
-- Built using core Java and OOP principles
+## 🚀 Features
+- Generate structured daily study plans based on user input
+- Frontend interface for easy interaction
+- Backend REST API for schedule generation logic
+- Modular design for scalability and future enhancements
 
-## 📷 Sample Output
-![Sample Output](image.png)
+## 🛠️ Tech Stack
+**Frontend:** HTML, CSS, JavaScript  
+**Backend:** Java, Spring Boot  
+**Core Concepts:** OOP, REST APIs, Data Modeling  
+**Tools:** Git, GitHub, Maven
 
-
-## 🛠️ Technologies
-- Java
-- ArrayList
-- OOP (Classes & Objects)
-- Date & Time (LocalDate)
-
-## 🚀 Future Plans
-- Add file saving/loading
-- Build a GUI using JavaFX
-- Turn into a web app using HTML/JavaScript
-
----
+## 📂 Project Structure
+intelliplanner-ui/ → Frontend interface
+planner_api/ → Backend API (Spring Boot)
 
