@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IntelliPlanner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="app">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+  <div class="logo">
+    <span class="logo-dot"></span>
+    IntelliPlanner
+  </div>
+
+  <nav class="nav-links">
+    <span class="nav-label">Workspace</span>
+    <a href="#" class="nav-item active" data-panel="dashboard">
+      <span class="nav-icon">▦</span> Dashboard
+    </a>
+    <a href="#" class="nav-item" data-panel="tasks">
+      <span class="nav-icon">✓</span> Tasks
+      <span class="nav-badge" id="task-badge">0</span>
+    </a>
+    <a href="#" class="nav-item" data-panel="focus">
+      <span class="nav-icon">◎</span> Focus
+    </a>
+
+    <span class="nav-label">Insights</span>
+    <a href="#" class="nav-item" data-panel="habits">
+      <span class="nav-icon">🔥</span> Habits
+    </a>
+    <a href="#" class="nav-item" data-panel="analytics">
+      <span class="nav-icon">▲</span> Analytics
+    </a>
+
+    <span class="nav-label">AI</span>
+    <a href="#" class="nav-item" data-panel="ai">
+      <span class="nav-icon">✦</span> AI Planner
+    </a>
+  </nav>
+</aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main">
+
+  <!-- DASHBOARD PANEL -->
+  <div class="panel active" id="panel-dashboard">
+
+    <div class="page-title">Good morning 👋</div>
+
+    <!-- STATS ROW -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Tasks Today</div>
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-sub">total added</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Completed</div>
+        <div class="stat-value" id="stat-done">0</div>
+        <div class="stat-sub up" id="stat-pct">0% done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Focus Time</div>
+        <div class="stat-value" id="stat-focus">0<span style="font-size:14px">m</span></div>
+        <div class="stat-sub warn">Goal: 120m</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Habit Streak</div>
+        <div class="stat-value">🔥 7</div>
+        <div class="stat-sub up">Personal best!</div>
+      </div>
+    </div>
+
+    <!-- PRIORITY QUEUE -->
+    <div class="section-title">
+      <span>⬆</span> Priority Queue
+    </div>
+    <div class="task-list" id="dash-task-list"></div>
+
+  </div>
+  <!-- TASKS PANEL -->
+<div class="panel" id="panel-tasks">
+  <div class="page-title">All Tasks</div>
+
+  <!-- ADD TASK FORM -->
+  <div class="add-form">
+    <input type="text" id="new-title" placeholder="Task title" />
+    <select id="new-priority">
+      <option value="high">High</option>
+      <option value="medium" selected>Medium</option>
+      <option value="low">Low</option>
+    </select>
+    <select id="new-tag">
+      <option value="work">Work</option>
+      <option value="personal">Personal</option>
+    </select>
+    <input type="date" id="new-due" />
+    <button id="add-btn">+ Add</button>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-row">
+    <input type="text" id="search-input" placeholder="Search..." />
+    <div class="filter-btns">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="active">Active</button>
+      <button class="filter-btn" data-filter="done">Done</button>
+      <button class="filter-btn" data-filter="high">High</button>
+    </div>
+  </div>
+
+  <div class="task-list" id="all-task-list"></div>
+</div>
+
+<!-- FOCUS PANEL -->
+<div class="panel" id="panel-focus">
+  <div class="page-title">Focus Mode</div>
+  <p style="color:var(--muted)">Coming soon...</p>
+</div>
+
+<!-- HABITS PANEL -->
+<div class="panel" id="panel-habits">
+  <div class="page-title">Habits</div>
+  <p style="color:var(--muted)">Coming soon...</p>
+</div>
+
+<!-- ANALYTICS PANEL -->
+<div class="panel" id="panel-analytics">
+  <div class="page-title">Analytics</div>
+  <p style="color:var(--muted)">Coming soon...</p>
+</div>
+
+<!-- AI PANEL -->
+<div class="panel" id="panel-ai">
+  <div class="page-title">AI Planner</div>
+  <p style="color:var(--muted)">Coming soon...</p>
+</div>
+
+</main>
+
+  </div>
+
+  <!-- <script src="app.js"></script> -->
+  <!-- TASK CARD TEMPLATE -->
+<template id="task-template">
+  <div class="task-card">
+    <button class="task-check"></button>
+    <div class="task-title"></div>
+    <div class="task-tags"></div>
+    <div class="task-due"></div>
+    <div class="task-score-wrap">
+      <div class="task-score"></div>
+      <div class="task-score-label">score</div>
+    </div>
+    <button class="task-delete">✕</button>
+  </div>
+</template>
+<script src="app.js"></script>
+</body>
+</html>
