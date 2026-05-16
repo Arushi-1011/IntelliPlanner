@@ -255,9 +255,39 @@
 </div>
 
 <!-- AI PANEL -->
+<!-- AI PANEL -->
 <div class="panel" id="panel-ai">
   <div class="page-title">AI Planner</div>
-  <p style="color:var(--muted)">Coming soon...</p>
+
+  <div class="ai-box">
+    <div class="ai-header">
+      <div class="ai-chip">✦ Claude AI</div>
+      <span class="ai-hint">Describe a goal — AI breaks it into actionable tasks</span>
+    </div>
+
+    <div class="ai-input-row">
+      <input type="text" id="ai-input" placeholder="e.g. Prepare for system design interview next week" />
+      <button id="ai-btn">✦ Break it down</button>
+    </div>
+
+    <div id="ai-thinking" class="ai-thinking" style="display:none">
+      <span class="spin">◎</span> Claude is thinking...
+    </div>
+
+    <div id="ai-error" class="ai-error" style="display:none"></div>
+
+    <div id="ai-results"></div>
+  </div>
+
+  <!-- ALSO SHOW ON DASHBOARD -->
+  <div class="section-title" style="margin-top:24px">
+    <span>✓</span> Added from AI
+  </div>
+  <div class="task-list" id="ai-added-list">
+    <p style="color:var(--muted);font-size:13px;padding:8px 0">
+      Tasks you add from AI will appear here and in your task list.
+    </p>
+  </div>
 </div>
 
 </main>
