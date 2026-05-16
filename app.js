@@ -472,3 +472,115 @@ document.querySelectorAll('.nav-item').forEach(link => {
     if (link.dataset.panel === 'analytics') renderAnalytics()
   })
 })
+// ── AI PLANNER ──
+let aiAddedTasks = []
+
+async function callClaude(goal) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: `You are an expert productivity planner. Break the user's goal into 4-6 concrete, actionable tasks.
+Respond ONLY with a valid JSON array. No markdown, no explanation, just the array.
+Each item must have:
+- title: string (max 65 chars, action-oriented)
+- priority: "high" | "medium" | "low"
+- estimate: string (e.g. "30 min", "2 hr")
+- tag: "work" | "personal"
+- notes: string (one short tip, max 60 chars)`,
+      messages: [{ role: 'user', content: `Goal: ${goal}` }]
+    })
+  })
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}))
+    throw new Error(err?.error?.message || 'API error ' + res.status)
+  }
+
+  const data  = await res.json()
+  const text  = data.content.map(c => c.text || '').join('')
+  const clean = text.replace(/```json|```/g, '').trim()
+  return JSON.parse(clean)
+}
+
+function renderAiResults(items) {
+  const el = document.getElementById('ai-results')
+  el.innerHTML = ''
+
+  items.forEach((item, i) => {
+    const card = document.createElement('div')
+    card.className = 'ai-result-card'
+    card.innerHTML = `
+      <div class="ai-result-body">
+        <div class="ai-result-title">${item.title}</div>
+        <div class="ai-result-meta">
+          <span><span class="dot dot-${item.priority}"></span>${item.priority}</span>
+          <span>⏱ ${item.estimate}</span>
+          <span>${item.tag}</span>
+          <span style="color:var(--text);font-style:italic">${item.notes || ''}</span>
+        </div>
+      </div>
+      <button class="ai-add-btn" data-index="${i}">+ Add</button>
+    `
+
+    card.querySelector('.ai-add-btn').addEventListener('click', function() {
+      const t = {
+        id:       nextId++,
+        title:    item.title,
+        priority: item.priority,
+        tag:      item.tag,
+        due:      '',
+        done:     false,
+      }
+      tasks.push(t)
+      aiAddedTasks.push(t)
+
+      this.textContent = '✓ Added'
+      this.classList.add('added')
+      this.disabled = true
+
+      updateStats()
+      renderDashTasks()
+      renderAiAddedList()
+    })
+
+    el.appendChild(card)
+  })
+}
+
+function renderAiAddedList() {
+  const el = document.getElementById('ai-added-list')
+  el.innerHTML = ''
+  if (!aiAddedTasks.length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:8px 0">Tasks you add from AI will appear here.</p>'
+    return
+  }
+  aiAddedTasks.forEach(t => renderTaskCard(t, el))
+}
+
+document.getElementById('ai-btn').addEventListener('click', async () => {
+  const goal = document.getElementById('ai-input').value.trim()
+  if (!goal) return
+
+  const btn      = document.getElementById('ai-btn')
+  const thinking = document.getElementById('ai-thinking')
+  const errorEl  = document.getElementById('ai-error')
+
+  btn.disabled      = true
+  thinking.style.display = 'flex'
+  errorEl.style.display  = 'none'
+  document.getElementById('ai-results').innerHTML = ''
+
+  try {
+    const items = await callClaude(goal)
+    renderAiResults(items)
+  } catch (e) {
+    errorEl.style.display  = 'flex'
+    errorEl.textContent    = '⚠ ' + (e.message || 'Could not reach Claude API.')
+  }
+
+  thinking.style.display = 'none'
+  btn.disabled           = false
+})
