@@ -479,12 +479,13 @@ async function callClaude(goal) {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
-  'Content-Type':      'application/json',
-  'x-api-key':         CONFIG.ANTHROPIC_API_KEY,
-  'anthropic-version': '2023-06-01',
-},
+      'Content-Type':            'application/json',
+      'x-api-key':               CONFIG.ANTHROPIC_API_KEY,
+      'anthropic-version':       '2023-06-01',
+      'anthropic-dangerous-request-allowed': 'true',
+    },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model:      'claude-sonnet-4-20250514',
       max_tokens: 1000,
       system: `You are an expert productivity planner. Break the user's goal into 4-6 concrete, actionable tasks.
 Respond ONLY with a valid JSON array. No markdown, no explanation, just the array.
@@ -520,16 +521,16 @@ function renderAiResults(items) {
       <div class="ai-result-body">
         <div class="ai-result-title">${item.title}</div>
         <div class="ai-result-meta">
-          <span><span class="dot dot-${item.priority}"></span>${item.priority}</span>
+          <span><span class="result-dot dot-${item.priority}"></span>${item.priority}</span>
           <span>⏱ ${item.estimate}</span>
           <span>${item.tag}</span>
-          <span style="color:var(--text);font-style:italic">${item.notes || ''}</span>
+          <span style="font-style:italic">${item.notes || ''}</span>
         </div>
       </div>
       <button class="ai-add-btn" data-index="${i}">+ Add</button>
     `
 
-    card.querySelector('.ai-add-btn').addEventListener('click', function() {
+    card.querySelector('.ai-add-btn').addEventListener('click', function () {
       const t = {
         id:       nextId++,
         title:    item.title,
@@ -572,7 +573,7 @@ document.getElementById('ai-btn').addEventListener('click', async () => {
   const thinking = document.getElementById('ai-thinking')
   const errorEl  = document.getElementById('ai-error')
 
-  btn.disabled      = true
+  btn.disabled           = true
   thinking.style.display = 'flex'
   errorEl.style.display  = 'none'
   document.getElementById('ai-results').innerHTML = ''
@@ -581,8 +582,8 @@ document.getElementById('ai-btn').addEventListener('click', async () => {
     const items = await callClaude(goal)
     renderAiResults(items)
   } catch (e) {
-    errorEl.style.display  = 'flex'
-    errorEl.textContent    = '⚠ ' + (e.message || 'Could not reach Claude API.')
+    errorEl.style.display = 'block'
+    errorEl.textContent   = '⚠ ' + (e.message || 'Could not reach Claude API.')
   }
 
   thinking.style.display = 'none'
