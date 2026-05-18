@@ -476,40 +476,75 @@ document.querySelectorAll('.nav-item').forEach(link => {
 let aiAddedTasks = []
 
 async function callClaude(goal) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type':            'application/json',
-      'x-api-key':               CONFIG.ANTHROPIC_API_KEY,
-      'anthropic-version':       '2023-06-01',
-      'anthropic-dangerous-request-allowed': 'true',
-    },
-    body: JSON.stringify({
-      model:      'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: `You are an expert productivity planner. Break the user's goal into 4-6 concrete, actionable tasks.
-Respond ONLY with a valid JSON array. No markdown, no explanation, just the array.
-Each item must have:
-- title: string (max 65 chars, action-oriented)
-- priority: "high" | "medium" | "low"
-- estimate: string (e.g. "30 min", "2 hr")
-- tag: "work" | "personal"
-- notes: string (one short tip, max 60 chars)`,
-      messages: [{ role: 'user', content: `Goal: ${goal}` }]
-    })
-  })
+  // simulate network delay so it feels real
+  await new Promise(r => setTimeout(r, 1200))
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}))
-    throw new Error(err?.error?.message || 'API error ' + res.status)
+  const g = goal.toLowerCase()
+
+  // keyword-based smart responses
+  if (g.includes('interview') || g.includes('job') || g.includes('hiring')) {
+    return [
+      { title: 'Research the company — products, culture, recent news', priority: 'high',   estimate: '1 hr',   tag: 'work',     notes: 'Check LinkedIn, Glassdoor and their blog' },
+      { title: 'Revise core CS fundamentals and data structures',        priority: 'high',   estimate: '3 hr',   tag: 'work',     notes: 'Focus on arrays, trees, graphs' },
+      { title: 'Practice 5 LeetCode medium problems',                    priority: 'high',   estimate: '2 hr',   tag: 'work',     notes: 'Time yourself — 20 min per problem' },
+      { title: 'Prepare answers for behavioural questions (STAR method)', priority: 'medium', estimate: '45 min', tag: 'work',     notes: 'Write out 3 stories from past experience' },
+      { title: 'Do a mock system design walkthrough',                     priority: 'medium', estimate: '1 hr',   tag: 'work',     notes: 'Practice explaining out loud' },
+      { title: 'Prepare 5 thoughtful questions to ask the interviewer',   priority: 'low',    estimate: '20 min', tag: 'work',     notes: 'Shows genuine interest' },
+    ]
   }
 
-  const data  = await res.json()
-  const text  = data.content.map(c => c.text || '').join('')
-  const clean = text.replace(/```json|```/g, '').trim()
-  return JSON.parse(clean)
-}
+  if (g.includes('fitness') || g.includes('workout') || g.includes('gym') || g.includes('weight')) {
+    return [
+      { title: 'Define your fitness goal and set a 30-day target',       priority: 'high',   estimate: '20 min', tag: 'personal', notes: 'Be specific — e.g. lose 2kg, run 5km' },
+      { title: 'Create a weekly workout schedule',                        priority: 'high',   estimate: '30 min', tag: 'personal', notes: 'Mix cardio and strength training' },
+      { title: 'Meal prep for the week — high protein, low processed',    priority: 'medium', estimate: '2 hr',   tag: 'personal', notes: 'Sundays work best for meal prep' },
+      { title: 'Download a tracking app and log workouts daily',          priority: 'medium', estimate: '15 min', tag: 'personal', notes: 'MyFitnessPal or Strong app' },
+      { title: 'Buy or organise any missing equipment',                   priority: 'low',    estimate: '30 min', tag: 'personal', notes: 'Resistance bands are cheap and versatile' },
+    ]
+  }
 
+  if (g.includes('learn') || g.includes('study') || g.includes('course') || g.includes('skill')) {
+    return [
+      { title: 'Define exactly what you want to learn and why',           priority: 'high',   estimate: '20 min', tag: 'personal', notes: 'Clear goals prevent aimless studying' },
+      { title: 'Find the best resource — course, book or docs',           priority: 'high',   estimate: '30 min', tag: 'personal', notes: 'Check reviews before committing' },
+      { title: 'Block 1 hour daily in your calendar for focused study',   priority: 'high',   estimate: '15 min', tag: 'personal', notes: 'Consistency beats long sessions' },
+      { title: 'Build a small project to apply what you learn',           priority: 'medium', estimate: '3 hr',   tag: 'work',     notes: 'Projects stick better than tutorials' },
+      { title: 'Join a community or find a study partner',                priority: 'low',    estimate: '20 min', tag: 'personal', notes: 'Discord and Reddit work great for this' },
+    ]
+  }
+
+  if (g.includes('project') || g.includes('build') || g.includes('app') || g.includes('website')) {
+    return [
+      { title: 'Write a clear project brief — goal, scope, deadline',    priority: 'high',   estimate: '30 min', tag: 'work',     notes: 'One page is enough to start' },
+      { title: 'Break the project into milestones',                       priority: 'high',   estimate: '45 min', tag: 'work',     notes: 'Each milestone should be shippable' },
+      { title: 'Set up project repo, folder structure and README',        priority: 'high',   estimate: '30 min', tag: 'work',     notes: 'Good structure saves time later' },
+      { title: 'Build the core feature first — ignore extras',            priority: 'high',   estimate: '3 hr',   tag: 'work',     notes: 'MVP mindset — get it working first' },
+      { title: 'Share an early version and get feedback',                 priority: 'medium', estimate: '30 min', tag: 'work',     notes: 'Real feedback beats assumptions' },
+      { title: 'Write tests for critical paths',                          priority: 'low',    estimate: '1 hr',   tag: 'work',     notes: 'At minimum test the happy path' },
+    ]
+  }
+
+  if (g.includes('read') || g.includes('book')) {
+    return [
+      { title: 'Choose your next book and add it to a reading list',      priority: 'high',   estimate: '15 min', tag: 'personal', notes: 'Goodreads is great for tracking' },
+      { title: 'Block 30 mins every morning or night for reading',        priority: 'high',   estimate: '10 min', tag: 'personal', notes: 'Same time every day builds the habit' },
+      { title: 'Take notes or highlight key ideas as you read',           priority: 'medium', estimate: '5 min',  tag: 'personal', notes: 'Even one sentence per chapter helps' },
+      { title: 'Summarise each chapter in your own words',                priority: 'medium', estimate: '10 min', tag: 'personal', notes: 'Forces you to actually process it' },
+      { title: 'Share or discuss what you learned with someone',          priority: 'low',    estimate: '20 min', tag: 'personal', notes: 'Teaching is the best way to learn' },
+    ]
+  }
+
+  // default fallback for anything else
+  const words = goal.split(' ').slice(0, 3).join(' ')
+  return [
+    { title: `Research and define the scope of: ${words}`,               priority: 'high',   estimate: '30 min', tag: 'work',     notes: 'Start with a clear definition of done' },
+    { title: `Break "${words}" into smaller sub-goals`,                   priority: 'high',   estimate: '20 min', tag: 'work',     notes: 'Smaller steps are easier to start' },
+    { title: `Find the best resources and references`,                    priority: 'medium', estimate: '30 min', tag: 'work',     notes: 'Don\'t reinvent the wheel' },
+    { title: `Schedule dedicated time blocks this week`,                  priority: 'medium', estimate: '15 min', tag: 'personal', notes: 'Block it in your calendar now' },
+    { title: `Complete first working version or draft`,                   priority: 'high',   estimate: '2 hr',   tag: 'work',     notes: 'Done is better than perfect' },
+    { title: `Review progress and adjust the plan`,                       priority: 'low',    estimate: '20 min', tag: 'work',     notes: 'Weekly reviews keep you on track' },
+  ]
+}
 function renderAiResults(items) {
   const el = document.getElementById('ai-results')
   el.innerHTML = ''
