@@ -545,8 +545,8 @@ async function callClaude(goal) {
     { title: `Review progress and adjust the plan`,                       priority: 'low',    estimate: '20 min', tag: 'work',     notes: 'Weekly reviews keep you on track' },
   ]
 }
-function renderAiResults(items) {
-  const el = document.getElementById('ai-results')
+function renderAiResultsTo(items, containerId = 'ai-results') {
+  const el = document.getElementById(containerId)
   el.innerHTML = ''
 
   items.forEach((item, i) => {
@@ -615,7 +615,7 @@ document.getElementById('ai-btn').addEventListener('click', async () => {
 
   try {
     const items = await callClaude(goal)
-    renderAiResults(items)
+    renderAiResultsTo(items)
   } catch (e) {
     errorEl.style.display = 'block'
     errorEl.textContent   = '⚠ ' + (e.message || 'Could not reach Claude API.')
