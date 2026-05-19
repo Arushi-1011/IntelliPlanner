@@ -624,3 +624,28 @@ document.getElementById('ai-btn').addEventListener('click', async () => {
   thinking.style.display = 'none'
   btn.disabled           = false
 })
+// ── AI ON DASHBOARD ──
+document.getElementById('ai-btn-dash').addEventListener('click', async () => {
+  const goal    = document.getElementById('ai-input-dash').value.trim()
+  if (!goal) return
+
+  const btn      = document.getElementById('ai-btn-dash')
+  const thinking = document.getElementById('ai-thinking-dash')
+  const errorEl  = document.getElementById('ai-error-dash')
+
+  btn.disabled           = true
+  thinking.style.display = 'flex'
+  errorEl.style.display  = 'none'
+  document.getElementById('ai-results-dash').innerHTML = ''
+
+  try {
+    const items = await callClaude(goal)
+    renderAiResultsTo(items, 'ai-results-dash')
+  } catch (e) {
+    errorEl.style.display = 'block'
+    errorEl.textContent   = '⚠ ' + (e.message || 'Something went wrong.')
+  }
+
+  thinking.style.display = 'none'
+  btn.disabled           = false
+})
