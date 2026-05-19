@@ -76,7 +76,26 @@
         <div class="stat-sub up">Personal best!</div>
       </div>
     </div>
-
+     <!-- AI BOX ON DASHBOARD -->
+  <div class="section-title">
+    <span>✦</span> AI Task Breakdown
+  </div>
+  
+  <div class="ai-box" style="margin-bottom: 24px">
+    <div class="ai-header">
+      <div class="ai-chip">✦ Claude AI</div>
+      <span class="ai-hint">Describe a goal — AI breaks it into actionable tasks</span>
+    </div>
+    <div class="ai-input-row">
+      <input type="text" id="ai-input-dash" placeholder="e.g. Build a portfolio website this weekend" />
+      <button id="ai-btn-dash">✦ Break it down</button>
+    </div>
+    <div id="ai-thinking-dash" class="ai-thinking" style="display:none">
+      <span class="spin">◎</span> Thinking...
+    </div>
+    <div id="ai-error-dash" class="ai-error" style="display:none"></div>
+    <div id="ai-results-dash"></div>
+  </div>
     <!-- PRIORITY QUEUE -->
     <div class="section-title">
       <span>⬆</span> Priority Queue
